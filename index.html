@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Vibekes telefon</title>
+
+<link rel="apple-touch-icon" sizes="180x180" href="telefon.png" />
+<link rel="apple-touch-icon" href="telefon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Vibekes telefon" />
+<link rel="icon" href="telefon.png" />
+
+<style>
+:root{
+  --bg:#0b1220;
+  --text:#fff;
+  --muted:rgba(255,255,255,.75);
+  --stroke:rgba(255,255,255,.12);
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:22px;
+
+  --gap:14px;
+
+  /* Card sizing */
+  --cardMinH: 240px;
+
+  /* Photo sizing (elastic) */
+  --photoMinH: 150px;
+  --photoPad: 10px;
+
+  /* Info bar */
+  --infoH: 62px;
+
+  /* Header icon */
+  --iconSize: 120px;
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+  touch-action:manipulation;
+}
+
+html,body{
+  height:100%;
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+}
+
+body{
+  background:
+    radial-gradient(1200px 800px at 50% 0%, rgba(80,140,255,.22), transparent 55%),
+    radial-gradient(900px 600px at 10% 90%, rgba(0,255,170,.10), transparent 55%),
+    var(--bg);
+  color:var(--text);
+}
+
+.page{
+  min-height:100%;
+  padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));
+  display:flex;
+  justify-content:center;
+}
+
+.wrap{
+  width:100%;
+  max-width:980px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+/* Header */
+.header{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:10px;
+  padding:12px 12px 10px;
+  border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.045);
+  box-shadow:var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.topIcon{
+  width:var(--iconSize);
+  height:var(--iconSize);
+  border-radius:28px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--stroke);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  display:grid;
+  place-items:center;
+  animation: iconBreath 4.2s ease-in-out infinite;
+  transform-origin:center;
+}
+@keyframes iconBreath{
+  0%,100%{ transform:scale(1); }
+  50%{ transform:scale(1.035); }
+}
+.topIcon img{
+  width:75%;
+  height:75%;
+  object-fit:contain;
+}
+
+h1{
+  margin:0;
+  font-size:clamp(20px,3.2vw,30px);
+}
+.hint{
+  margin:0;
+  color:rgba(255,255,255,.82);
+  font-size:clamp(13px,2.6vw,15px);
+}
+
+/* Toggle row */
+.methodRow{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin-top:2px;
+}
+
+.toggle{
+  display:flex;
+  gap:8px;
+  padding:8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.35);
+}
+
+.toggle button{
+  appearance:none;
+  border:0;
+  padding:10px 14px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:14px;
+  color:rgba(255,255,255,.85);
+  background:transparent;
+}
+.toggle button[aria-pressed="true"]{
+  color:#0b1220;
+  background:rgba(0,255,170,.95);
+}
+.toggle small{
+  display:block;
+  font-weight:700;
+  opacity:.9;
+}
+
+/* Grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:var(--gap);
+}
+
+/* Card */
+.card{
+  text-decoration:none;
+  color:inherit;
+  border-radius:var(--radius);
+  border:1px solid var(--stroke);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  background:rgba(255,255,255,.06);
+
+  display:flex;
+  flex-direction:column;
+
+  min-height:var(--cardMinH);
+  -webkit-tap-highlight-color:transparent;
+  transform:translateZ(0);
+}
+.card:active{ transform:scale(.985); }
+
+/* Photo zone */
+.photo{
+  width:100%;
+  aspect-ratio: 1 / 1;
+  min-height: var(--photoMinH);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:var(--photoPad);
+  background:rgba(255,255,255,.05);
+}
+.photo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+.initial{
+  font-size:52px;
+  font-weight:900;
+  opacity:.95;
+}
+
+/* Info bar */
+.info{
+  flex:0 0 var(--infoH);
+  height:var(--infoH);
+  background:rgba(0,0,0,.90);
+  border-top:1px solid rgba(255,255,255,.10);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  gap:10px;
+}
+.name{
+  margin:0;
+  font-weight:900;
+  font-size:clamp(18px,3vw,22px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  letter-spacing:.2px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:rgba(0,255,170,.18);
+  border:1px solid rgba(0,255,170,.35);
+  font-weight:800;
+  font-size:clamp(11px,2.4vw,13px);
+  line-height:1;
+  white-space:nowrap;
+}
+
+.dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#00ffaa;
+  position:relative;
+}
+.dot::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:#00ffaa;
+  animation:pulse 2.5s infinite ease-out;
+}
+@keyframes pulse{
+  0%{ transform:scale(1); opacity:.7; }
+  70%{ transform:scale(2.2); opacity:0; }
+  100%{ opacity:0; }
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+  :root{ --photoPad: 6px; }
+}
+
+@media (max-width:390px){
+  :root{
+    --gap:12px;
+    --iconSize: 102px;
+    --cardMinH: 220px;
+    --photoMinH: 132px;
+    --infoH: 60px;
+    --photoPad: 8px;
+  }
+  .info{ padding:9px 10px; }
+}
+
+@media (orientation: landscape) and (max-height: 430px){
+  .grid{ grid-template-columns:repeat(3,1fr); }
+  :root{
+    --cardMinH: 200px;
+    --photoMinH: 110px;
+    --infoH: 56px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="page"><div class="wrap">
+
+<header class="header">
+  <div class="topIcon"><img src="telefon.png" alt=""></div>
+  <h1>Vibekes telefon</h1>
+  <p class="hint">Tryk på billede for opkald</p>
+
+  <div class="methodRow" aria-label="Vælg opkaldsmetode">
+    <div class="toggle" role="group" aria-label="Opkald via">
+      <button id="btnTel" type="button" aria-pressed="true">
+        Telefon<br><small>SIM / normalt opkald</small>
+      </button>
+      <button id="btnWa" type="button" aria-pressed="false">
+        WhatsApp<br><small>åbner chat</small>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="grid">
+
+  <!-- NOTE: data-phone i internationalt format (med + i visning, men vi renser i JS) -->
+  <a class="card" href="#" data-name="Peter" data-phone="+4520324378" aria-label="Ring til Peter">
+    <div class="photo">
+      <img src="peter.jpg" alt="Peter"
+           onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>P</div>';">
+
+    </div>
+    <div class="info">
+      <p class="name">Peter</p>
+      <span class="badge"><span class="dot"></span> RING</span>
+    </div>
+  </a>
+
+  <a class="card" href="#" data-name="Poula" data-phone="+4521538213" aria-label="Ring til Poula">
+    <div class="photo">
+      <img src="poula.jpg" alt="Poula"
+           onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>P</div>';">
+
+    </div>
+    <div class="info">
+      <p class="name">Poula</p>
+      <span class="badge"><span class="dot"></span> RING</span>
+    </div>
+  </a>
+
+  <a class="card" href="#" data-name="Bente" data-phone="+4528223687" aria-label="Ring til Bente">
+    <div class="photo">
+      <img src="bente.jpg" alt="Bente"
+           onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>B</div>';">
+
+    </div>
+    <div class="info">
+      <p class="name">Bente</p>
+      <span class="badge"><span class="dot"></span> RING</span>
+    </div>
+  </a>
+
+  <a class="card" href="#" data-name="Britta" data-phone="+4523985223" aria-label="Ring til Britta">
+    <div class="photo">
+      <img src="britta.jpg" alt="Britta"
+           onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>B</div>';">
+
+    </div>
+    <div class="info">
+      <p class="name">Britta</p>
+      <span class="badge"><span class="dot"></span> RING</span>
+    </div>
+  </a>
+
+  <a class="card" href="#" data-name="Else" data-phone="+4542769137" aria-label="Ring til Else">
+    <div class="photo">
+      <img src="else.jpg" alt="Else"
+           onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>E</div>';">
+
+    </div>
+    <div class="info">
+      <p class="name">Else</p>
+      <span class="badge"><span class="dot"></span> RING</span>
+    </div>
+  </a>
+
+  <a class="card" href="#" data-name="Herdis" data-phone="+4521764268" aria-label="Ring til Herdis">
+    <div class="photo">
+      <img src="herdis.jpg" alt="Herdis"
+           onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>H</div>';">
+
+    </div>
+    <div class="info">
+      <p class="name">Herdis</p>
+      <span class="badge"><span class="dot"></span> RING</span>
+    </div>
+  </a>
+
+  <a class="card" href="#" data-name="Hanne" data-phone="+4528965403" aria-label="Ring til Hanne">
+    <div class="photo">
+      <img src="hanne.jpg" alt="Hanne"
+           onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>H</div>';">
+
+    </div>
+    <div class="info">
+      <p class="name">Hanne</p>
+      <span class="badge"><span class="dot"></span> RING</span>
+    </div>
+  </a>
+
+  <a class="card" href="#" data-name="Karen" data-phone="+4541663491" aria-label="Ring til Karen">
+    <div class="photo">
+      <img src="karen.jpg" alt="Karen"
+           onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>K</div>';">
+
+    </div>
+    <div class="info">
+      <p class="name">Karen</p>
+      <span class="badge"><span class="dot"></span> RING</span>
+    </div>
+  </a>
+
+</main>
+</div></div>
+
+<script>
+function tinyVibrate() {
+  try { if (navigator.vibrate) navigator.vibrate(20); } catch(e) {}
+}
+
+const STORAGE_KEY = "vibeke_call_method"; // "tel" eller "wa"
+let method = localStorage.getItem(STORAGE_KEY) || "tel";
+
+const btnTel = document.getElementById("btnTel");
+const btnWa  = document.getElementById("btnWa");
+
+function setMethod(m){
+  method = m;
+  localStorage.setItem(STORAGE_KEY, method);
+  btnTel.setAttribute("aria-pressed", method === "tel" ? "true" : "false");
+  btnWa.setAttribute("aria-pressed",  method === "wa"  ? "true" : "false");
+}
+
+btnTel.addEventListener("click", () => { tinyVibrate(); setMethod("tel"); });
+btnWa.addEventListener("click",  () => { tinyVibrate(); setMethod("wa");  });
+
+setMethod(method);
+
+// Renser nummer til WhatsApp (skal være internationalt uden +, mellemrum osv.)
+function normalizePhoneForWa(phone){
+  return (phone || "").replace(/[^\d]/g, ""); // behold kun cifre
+}
+
+// Åbn WhatsApp: prøv app-scheme først, fallback til wa.me
+function openWhatsApp(phone, name){
+  const p = normalizePhoneForWa(phone);
+  // Du kan ændre teksten her:
+  const text = encodeURIComponent("Hej " + name + " – kan du ringe til mig?");
+  const appUrl = "whatsapp://send?phone=" + p + "&text=" + text;
+  const webUrl = "https://wa.me/" + p + "?text=" + text;
+
+  // Forsøg app. Hvis den ikke åbner (fx på nogle setups), så fallback til web efter kort tid.
+  window.location.href = appUrl;
+  setTimeout(() => {
+    window.location.href = webUrl;
+  }, 450);
+}
+
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', (e) => {
+    e.preventDefault();
+    tinyVibrate();
+
+    const name  = card.getAttribute("data-name")  || "";
+    const phone = card.getAttribute("data-phone") || "";
+
+    if(method === "wa"){
+      openWhatsApp(phone, name);
+    }else{
+      window.location.href = "tel:" + phone;
+    }
+  }, { passive: false });
+});
+
+// Lås pinch-zoom
+['gesturestart','gesturechange','gestureend'].forEach(evt => {
+  document.addEventListener(evt, function(e){ e.preventDefault(); }, { passive: false });
+});
+</script>
+
+</body>
+</html>
