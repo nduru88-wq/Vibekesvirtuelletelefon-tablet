@@ -23,18 +23,12 @@
 
   --gap:14px;
 
-  /* Card sizing */
-  --cardMinH: 240px;
-
-  /* Photo sizing (elastic) */
-  --photoMinH: 150px;
-  --photoPad: 10px;
-
-  /* Info bar */
-  --infoH: 62px;
-
   /* Header icon */
-  --iconSize: 120px;
+  --iconSize: 92px;
+
+  /* Info bar (auto, but comfortable) */
+  --infoPadY: 10px;
+  --infoPadX: 12px;
 }
 
 *{
@@ -49,6 +43,7 @@ html,body{
   height:100%;
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  overflow:hidden; /* 🔒 ingen scroll */
 }
 
 body{
@@ -60,28 +55,31 @@ body{
 }
 
 .page{
-  min-height:100%;
-  padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));
+  height:100%;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));
   display:flex;
   justify-content:center;
 }
 
 .wrap{
   width:100%;
-  max-width:980px;
+  max-width:1200px;
+  height:100%;
   display:flex;
   flex-direction:column;
-  gap:16px;
+  gap:12px;
+  min-height:0; /* vigtigt når grid skal kunne shrinke */
 }
 
 /* Header */
 .header{
+  flex:0 0 auto;
   display:flex;
-  flex-direction:column;
   align-items:center;
-  text-align:center;
-  gap:10px;
-  padding:12px 12px 10px;
+  justify-content:space-between;
+  gap:14px;
+
+  padding:10px 12px;
   border-radius:var(--radius);
   border:1px solid rgba(255,255,255,.10);
   background:rgba(255,255,255,.045);
@@ -90,10 +88,17 @@ body{
   -webkit-backdrop-filter: blur(10px);
 }
 
+.headLeft{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
 .topIcon{
   width:var(--iconSize);
   height:var(--iconSize);
-  border-radius:28px;
+  border-radius:22px;
   background:rgba(255,255,255,.06);
   border:1px solid var(--stroke);
   box-shadow:0 10px 30px rgba(0,0,0,.35);
@@ -101,6 +106,7 @@ body{
   place-items:center;
   animation: iconBreath 4.2s ease-in-out infinite;
   transform-origin:center;
+  flex:0 0 auto;
 }
 @keyframes iconBreath{
   0%,100%{ transform:scale(1); }
@@ -112,28 +118,27 @@ body{
   object-fit:contain;
 }
 
+.headText{
+  min-width:0;
+}
+
 h1{
   margin:0;
-  font-size:clamp(20px,3.2vw,30px);
+  font-size:clamp(18px,2.2vw,26px);
+  line-height:1.05;
 }
 .hint{
-  margin:0;
+  margin:2px 0 0;
   color:rgba(255,255,255,.82);
-  font-size:clamp(13px,2.6vw,15px);
+  font-size:clamp(12px,1.6vw,14px);
 }
 
-/* Toggle row */
-.methodRow{
-  width:100%;
-  display:flex;
-  justify-content:center;
-  margin-top:2px;
-}
-
+/* Toggle */
 .toggle{
+  flex:0 0 auto;
   display:flex;
   gap:8px;
-  padding:8px;
+  padding:6px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,.12);
   background:rgba(0,0,0,.35);
@@ -142,12 +147,13 @@ h1{
 .toggle button{
   appearance:none;
   border:0;
-  padding:10px 14px;
+  padding:10px 12px;
   border-radius:999px;
   font-weight:900;
   font-size:14px;
   color:rgba(255,255,255,.85);
   background:transparent;
+  line-height:1.1;
 }
 .toggle button[aria-pressed="true"]{
   color:#0b1220;
@@ -157,12 +163,16 @@ h1{
   display:block;
   font-weight:700;
   opacity:.9;
+  font-size:12px;
 }
 
-/* Grid */
+/* 🔥 Grid: låst 4x2 uden scroll */
 .grid{
+  flex:1 1 auto;
+  min-height:0;
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns:repeat(4, 1fr);
+  grid-template-rows:repeat(2, 1fr);
   gap:var(--gap);
 }
 
@@ -179,21 +189,21 @@ h1{
   display:flex;
   flex-direction:column;
 
-  min-height:var(--cardMinH);
+  height:100%;            /* fyld cellen */
+  min-height:0;           /* allow shrink */
   -webkit-tap-highlight-color:transparent;
   transform:translateZ(0);
 }
 .card:active{ transform:scale(.985); }
 
-/* Photo zone */
+/* Photo zone: fylder det meste */
 .photo{
-  width:100%;
-  aspect-ratio: 1 / 1;
-  min-height: var(--photoMinH);
+  flex:1 1 auto;
+  min-height:0;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:var(--photoPad);
+  padding:10px;
   background:rgba(255,255,255,.05);
 }
 .photo img{
@@ -203,27 +213,27 @@ h1{
   display:block;
 }
 .initial{
-  font-size:52px;
+  font-size:clamp(34px,4vw,52px);
   font-weight:900;
   opacity:.95;
 }
 
 /* Info bar */
 .info{
-  flex:0 0 var(--infoH);
-  height:var(--infoH);
+  flex:0 0 auto;
   background:rgba(0,0,0,.90);
   border-top:1px solid rgba(255,255,255,.10);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:10px 12px;
+  padding:var(--infoPadY) var(--infoPadX);
   gap:10px;
 }
+
 .name{
   margin:0;
   font-weight:900;
-  font-size:clamp(18px,3vw,22px);
+  font-size:clamp(16px,1.8vw,20px);
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -239,7 +249,7 @@ h1{
   background:rgba(0,255,170,.18);
   border:1px solid rgba(0,255,170,.35);
   font-weight:800;
-  font-size:clamp(11px,2.4vw,13px);
+  font-size:clamp(11px,1.3vw,13px);
   line-height:1;
   white-space:nowrap;
 }
@@ -265,29 +275,20 @@ h1{
   100%{ opacity:0; }
 }
 
-@supports (-webkit-overflow-scrolling: touch) {
-  :root{ --photoPad: 6px; }
-}
-
-@media (max-width:390px){
+/* Små justeringer hvis nogen bruger mobil */
+@media (max-width: 700px){
   :root{
     --gap:12px;
-    --iconSize: 102px;
-    --cardMinH: 220px;
-    --photoMinH: 132px;
-    --infoH: 60px;
-    --photoPad: 8px;
+    --iconSize: 74px;
+    --infoPadY: 9px;
+    --infoPadX: 10px;
   }
-  .info{ padding:9px 10px; }
-}
-
-@media (orientation: landscape) and (max-height: 430px){
-  .grid{ grid-template-columns:repeat(3,1fr); }
-  :root{
-    --cardMinH: 200px;
-    --photoMinH: 110px;
-    --infoH: 56px;
+  .grid{
+    grid-template-columns:repeat(2, 1fr);
+    grid-template-rows:auto;
+    overflow:auto;
   }
+  html,body{ overflow:auto; }
 }
 </style>
 </head>
@@ -296,30 +297,30 @@ h1{
 <div class="page"><div class="wrap">
 
 <header class="header">
-  <div class="topIcon"><img src="telefon.png" alt=""></div>
-  <h1>Vibekes telefon</h1>
-  <p class="hint">Tryk på billede for opkald</p>
-
-  <div class="methodRow" aria-label="Vælg opkaldsmetode">
-    <div class="toggle" role="group" aria-label="Opkald via">
-      <button id="btnTel" type="button" aria-pressed="true">
-        Telefon<br><small>SIM / normalt opkald</small>
-      </button>
-      <button id="btnWa" type="button" aria-pressed="false">
-        WhatsApp<br><small>åbner chat</small>
-      </button>
+  <div class="headLeft">
+    <div class="topIcon"><img src="telefon.png" alt=""></div>
+    <div class="headText">
+      <h1>Vibekes telefon</h1>
+      <p class="hint">Tryk på billede for opkald</p>
     </div>
+  </div>
+
+  <div class="toggle" role="group" aria-label="Opkald via">
+    <button id="btnTel" type="button" aria-pressed="true">
+      Telefon<br><small>SIM / normalt</small>
+    </button>
+    <button id="btnWa" type="button" aria-pressed="false">
+      WhatsApp<br><small>åbner chat</small>
+    </button>
   </div>
 </header>
 
 <main class="grid">
 
-  <!-- NOTE: data-phone i internationalt format (med + i visning, men vi renser i JS) -->
   <a class="card" href="#" data-name="Peter" data-phone="+4520324378" aria-label="Ring til Peter">
     <div class="photo">
       <img src="peter.jpg" alt="Peter"
            onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>P</div>';">
-
     </div>
     <div class="info">
       <p class="name">Peter</p>
@@ -331,7 +332,6 @@ h1{
     <div class="photo">
       <img src="poula.jpg" alt="Poula"
            onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>P</div>';">
-
     </div>
     <div class="info">
       <p class="name">Poula</p>
@@ -343,7 +343,6 @@ h1{
     <div class="photo">
       <img src="bente.jpg" alt="Bente"
            onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>B</div>';">
-
     </div>
     <div class="info">
       <p class="name">Bente</p>
@@ -355,7 +354,6 @@ h1{
     <div class="photo">
       <img src="britta.jpg" alt="Britta"
            onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>B</div>';">
-
     </div>
     <div class="info">
       <p class="name">Britta</p>
@@ -367,7 +365,6 @@ h1{
     <div class="photo">
       <img src="else.jpg" alt="Else"
            onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>E</div>';">
-
     </div>
     <div class="info">
       <p class="name">Else</p>
@@ -379,7 +376,6 @@ h1{
     <div class="photo">
       <img src="herdis.jpg" alt="Herdis"
            onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>H</div>';">
-
     </div>
     <div class="info">
       <p class="name">Herdis</p>
@@ -391,7 +387,6 @@ h1{
     <div class="photo">
       <img src="hanne.jpg" alt="Hanne"
            onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>H</div>';">
-
     </div>
     <div class="info">
       <p class="name">Hanne</p>
@@ -403,7 +398,6 @@ h1{
     <div class="photo">
       <img src="karen.jpg" alt="Karen"
            onerror="this.remove(); this.parentElement.innerHTML='<div class=&quot;initial&quot;>K</div>';">
-
     </div>
     <div class="info">
       <p class="name">Karen</p>
@@ -439,18 +433,16 @@ setMethod(method);
 
 // Renser nummer til WhatsApp (skal være internationalt uden +, mellemrum osv.)
 function normalizePhoneForWa(phone){
-  return (phone || "").replace(/[^\d]/g, ""); // behold kun cifre
+  return (phone || "").replace(/[^\d]/g, "");
 }
 
 // Åbn WhatsApp: prøv app-scheme først, fallback til wa.me
 function openWhatsApp(phone, name){
   const p = normalizePhoneForWa(phone);
-  // Du kan ændre teksten her:
   const text = encodeURIComponent("Hej " + name + " – kan du ringe til mig?");
   const appUrl = "whatsapp://send?phone=" + p + "&text=" + text;
   const webUrl = "https://wa.me/" + p + "?text=" + text;
 
-  // Forsøg app. Hvis den ikke åbner (fx på nogle setups), så fallback til web efter kort tid.
   window.location.href = appUrl;
   setTimeout(() => {
     window.location.href = webUrl;
